@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DVD logo</title>
+    <script src="p5.min.js"></script>
+    <style>
+        body{
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let logo;
+
+        function setup(){
+            createCanvas(innerWidth, innerHeight);
+            logo = new Logo(3, true);
+        }
+
+        class Logo{
+            constructor(speed, image){
+                this._x = random(width/2);
+                this._y = random(height/2);
+                this._color = color(random(255), random(255), random(255));
+                this._forceX = speed;
+                this._forceY = speed;
+                this._image = image;
+                if(this.image) this._img = loadImage('dvd_logo.png');
+            }
+
+            get x(){
+                return this._x;
+            }
+            get y(){
+                return this._y;
+            }
+            get color(){
+                return this._color;
+            }
+            get forceX(){
+                return this._forceX;
+            }
+            get forceY(){
+                return this._forceY;
+            }
+            get image(){
+                return this._image;
+            }
+            get img(){
+                return this._img;
+            }
+
+            set x(x){
+                this._x = x;
+            }
+            set y(y){
+                this._y = y;
+            }
+            set color(c){
+                this._color = c;
+            }
+            set forceX(x){
+                this._forceX = x;
+            }
+            set forceY(y){
+                this._forceY = y;
+            }
+
+            draw(){
+                push();
+                if(this.image){
+                    tint(this.color);
+                    image(this.img, this.x, this.y, 300, 120);
+                } else {
+                    fill(this.color);
+                    rect(this.x, this.y, 300, 120);
+                }
+                pop();
+                this.move();
+            }
+            changeColor(){
+                this.color = color(random(255), random(255), random(255));
+            }
+            move(){
+                this.x += this.forceX;
+                this.y += this.forceY;
+                this.checkCollision();
+            }
+            checkCollision(){
+                if(this.x+300 >= width || this.x <= 0){
+                    this.forceX = -this.forceX;
+                    this.changeColor();
+                }
+                if(this.y+120 >= height || this.y <= 0){
+                    this.forceY = -this.forceY;
+                    this.changeColor();
+                }
+            }
+        }
+
+        function draw(){
+            background(40);
+            noStroke();
+            logo.draw();
+        }
+    </script>
+</body>
+</html>
